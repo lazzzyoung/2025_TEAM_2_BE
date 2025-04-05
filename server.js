@@ -20,11 +20,8 @@ let connectDB = require('./database.js')
 let db
 connectDB.then((client)=>{
   db = client.db('triangle')
-
-  console.log('server DB연결성공')
-
 }).catch((err)=>{
-  console.log(err)
+  // console.log(err)
 })
 
 app.use(cors());
@@ -38,9 +35,5 @@ app.use('/group',require('./routes/group.js'))
 app.use('/chat', require('./routes/chat.js'));
 
 server.listen(port, () => {
-  console.log('서버연결성공')
-})
-
-app.get('/',(req,res)=>{
-  res.send("서버 잘 돌아가는중")
+  // console.log('서버연결성공')
 })

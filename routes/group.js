@@ -10,9 +10,9 @@ require('dotenv').config();
 let db
 connectDB.then((client)=>{
   db = client.db('triangle')
-  console.log('group DB연결성공')
+  // console.log('group DB연결성공')
 }).catch((err)=>{
-  console.log(err)
+  // console.log(err)
 }) 
 
 // DB에 존재하는 그룹 목록 GET
@@ -114,7 +114,7 @@ router.get('/get/detail', async (req, res) => {
             message: '그룹 상세 정보를 성공적으로 가져왔습니다.',
             group: {
                 location: group.location,
-                membersInfo: userInfo, // 유저 정보 포함
+                membersInfo: userInfo, 
             }
         });
     } catch (error) {
@@ -378,12 +378,12 @@ router.post('/join', async (req, res) => {
         return res.status(404).json({ message: '그룹을 찾을 수 없습니다.' });
       }
 
-    // 이미 참가한 그룹인지 확인
+    
     if (group.members.includes(userId.toString())) {
     return res.status(400).json({ message: '이미 참가한 방입니다.' });
     }
 
-    // 그룹 상태 확인
+    
     if (group.status === 2 || group.status === 1) {
         return res.status(409).json({ message: '참여할 수 없는 그룹입니다.' });
       }
@@ -402,7 +402,7 @@ router.post('/join', async (req, res) => {
 
 
 
-      // 참가 후 멤버 수가 maxPeople에 도달하면 상태를 1로 변경
+      
       const updatedGroup = await db.collection('groups').findOne({ _id: new ObjectId(groupId) });
       if (updatedGroup.members.length >= updatedGroup.maxPeople) {
         await db.collection('groups').updateOne(
@@ -423,13 +423,13 @@ router.post('/join', async (req, res) => {
 // 그룹 검색 API
 router.get('/search', async (req, res) => {
     const { query } = req.query;
-    // 검색어가 두 글자 이상인 경우만 처리
+    
     if (!query || query.length < 2) {
         return res.status(400).json({ message: '검색어는 두 글자 이상이어야 합니다.' });
     }
 
     try {
-        // 토큰에서 userId 추출
+        
         const token = req.headers['authorization'];
         if (!token) {
             return res.status(401).json({ message: '인증 토큰이 제공되지 않았습니다.' });

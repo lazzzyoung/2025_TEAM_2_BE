@@ -7,9 +7,9 @@ require('dotenv').config();
 let db;
 connectDB.then((client) => {
   db = client.db('triangle');
-  console.log('chat DB연결성공');
+  // console.log('chat DB연결성공');
 }).catch((err) => {
-  console.log(err);
+  // console.log(err);
 });
 
 
@@ -140,7 +140,7 @@ router.post('/create', async (req, res) => {
   
 // 그룹 채팅 send
 router.post('/send/groupRoom', async (req, res) => {
-  console.log("요청은옴")
+  // console.log("요청은옴")
   const token = req.headers['authorization'];
   const { groupId, message } = req.body;
 

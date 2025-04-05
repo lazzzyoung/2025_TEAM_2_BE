@@ -10,9 +10,9 @@ require('dotenv').config();
 let db
 connectDB.then((client)=>{
   db = client.db('triangle')
-  console.log('user DB연결성공')
+  // console.log('user DB연결성공')
 }).catch((err)=>{
-  console.log(err)
+  // console.log(err)
 }) 
 
 //회원 정보 조회 API
@@ -53,7 +53,7 @@ router.get('/profile', async (req, res) => {
   }
 });
 
-//query 로 profile 정보를 받아올 유저 id 전달
+
 router.get('/profile/detail', async (req, res) => {
 
   const { userId } = req.query; 
@@ -137,37 +137,39 @@ router.delete('/delete', async (req, res) => {
     }
   });
 
-  router.delete('/delete/email', async (req, res) => {
+  // router.delete('/delete/email', async (req, res) => {
     
-    const { email} = req.body;
+  //   const { email} = req.body;
 
-    try {
+  //   try {
       
   
       
   
       
-      const response = await axios.post('https://univcert.com/api/v1/clear', {
-        key: process.env.UNIAPI_KEY, 
-        email: email,
-      });
+  //     const response = await axios.post('https://univcert.com/api/v1/clear', {
+  //       key: process.env.UNIAPI_KEY, 
+  //       email: email,
+  //     });
   
-      if (!response.data.success) {
-        return res.status(400).json({ message: '외부 인증 API에서 이메일 삭제 실패' });
-      } else {
-        return res.status(200).json({ message: '사용자가 성공적으로 삭제되었습니다.' });
-      }
+  //     if (!response.data.success) {
+  //       return res.status(400).json({ message: '외부 인증 API에서 이메일 삭제 실패' });
+  //     } else {
+  //       return res.status(200).json({ message: '사용자가 성공적으로 삭제되었습니다.' });
+  //     }
   
       
       
 
-    } catch (error) {
-      console.error('계정 삭제 오류:', error);
-      res.status(500).json({ message: '서버 오류 발생' });
-    }
-  });
+  //   } catch (error) {
+  //     console.error('계정 삭제 오류:', error);
+  //     res.status(500).json({ message: '서버 오류 발생' });
+  //   }
+  // });
   
+
 //회원 정보 업데이트 API
+
 router.patch('/update', async (req, res) => {
   const token = req.headers['authorization'];
 
@@ -245,7 +247,7 @@ router.post('/like', async (req, res) => {
     const alreadyLiked = (targetUser.likedBy_list || []).includes(userId);
 
    if (alreadyLiked) {
-      // 좋아요 취소
+      
       await db.collection('users').updateOne(
         { _id: new ObjectId(targetUserId) },
         {
@@ -253,7 +255,7 @@ router.post('/like', async (req, res) => {
         }
       );
 
-      // mylike_list에서 targetUserId를 제거
+      
       await db.collection('users').updateOne(
         { _id: new ObjectId(userId) },
         {
@@ -263,7 +265,7 @@ router.post('/like', async (req, res) => {
 
       return res.status(200).json({ message: '좋아요를 취소했습니다.' });
     } else {
-      // 좋아요 추가
+      
       await db.collection('users').updateOne(
         { _id: new ObjectId(targetUserId) },
         {
@@ -271,7 +273,7 @@ router.post('/like', async (req, res) => {
         }
       );
 
-      // mylike_list에 targetUserId 추가
+      
       await db.collection('users').updateOne(
         { _id: new ObjectId(userId) },
         {
@@ -301,7 +303,7 @@ router.post('/block', async (req, res) => {
     const decoded = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET);
     const userId = decoded.userId;
 
-    const { targetUserId } = req.body; // 요청 body에서 받도록 변경
+    const { targetUserId } = req.body; 
 
     if (!targetUserId) {
       return res.status(400).json({ message: '대상 사용자 ID가 없습니다.' });
@@ -323,14 +325,14 @@ router.post('/block', async (req, res) => {
     const alreadyBlocked = me.block_list?.includes(targetUserId);
 
     if (alreadyBlocked) {
-      // 차단 해제
+      
       await db.collection('users').updateOne(
         { _id: new ObjectId(userId) },
         { $pull: { block_list: targetUserId } }
       );
       return res.status(200).json({ message: '차단을 해제했습니다.' });
     } else {
-      // 차단 추가
+      
       await db.collection('users').updateOne(
         { _id: new ObjectId(userId) },
         { $addToSet: { block_list: targetUserId } }
@@ -342,7 +344,7 @@ router.post('/block', async (req, res) => {
     res.status(500).json({ message: '서버 오류 발생' });
   }
 });
-// 차단 목록 GET API - 유저 정보 포함
+// 차단 목록 GET API 
 router.get('/block', async (req, res) => {
   const token = req.headers['authorization'];
   if (!token) {
@@ -364,10 +366,10 @@ router.get('/block', async (req, res) => {
 
     const blockListIds = (user.block_list ?? []).map(id => new ObjectId(id));
 
-    // block_list에 있는 유저들의 정보 가져오기
+    
     const blockedUsers = await db.collection('users')
       .find({ _id: { $in: blockListIds } })
-      .project({ school:1,username: 1, nickname:1, icon:1 }) // 필요한 필드만 선택
+      .project({ school:1,username: 1, nickname:1, icon:1 }) 
       .toArray();
 
     res.status(200).json({ block_list: blockedUsers });
