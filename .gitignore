@@ -1,6 +1,9 @@
 # 환경 변수
 .env
 
+# 서버 키체인
+Delibuddy.pem
+
 # Node.js modules
 node_modules/
 
