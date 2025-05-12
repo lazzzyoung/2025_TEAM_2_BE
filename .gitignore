@@ -1,6 +1,11 @@
 # 환경 변수
 .env
 
+# key file / 인증서
+*.pem
+*.key
+*.crt
+
 # Node.js modules
 node_modules/
 

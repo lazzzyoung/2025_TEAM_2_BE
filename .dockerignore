@@ -1,2 +1,38 @@
+# node_modules: 로컬 의존성, 컨테이너 안에서 다시 설치함
 node_modules
+
+# 환경 변수 파일 (민감 정보)
 .env
+.env.*
+
+# 인증서 / 키 파일
+*.pem
+*.key
+*.crt
+
+# 로그 파일
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 임시/백업 파일
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# 빌드 산출물
+dist/
+build/
+
+# 운영체제 및 에디터 관련 파일
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# 기타 프로젝트에서 필요 없는 파일
+coverage/
+*.test.js
